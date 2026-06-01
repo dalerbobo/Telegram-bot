@@ -42,15 +42,20 @@ async def handle_link(message: types.Message):
     url = message.text
     print("LINK RECEIVED:", url) 
     ydl_opts = {
-        "quiet": True,
-        "no_warnings": True,
+        "quiet": false,
+        "no_warnings": false,
     }
 
     print"("GETTING VIDEO INFO...")
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
+        
     print("VIDEO INFO RECEIVED")
+except Exception as e:
+    print("YTDLP ERROR:", e)
+    await message.answer(f"Ошибка: {e}")
+    return
     title = info.get("title", "Unknown")
     duration = info.get("duration", 0)
     views = info.get("view_count", 0)
