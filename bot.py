@@ -42,13 +42,13 @@ async def handle_link(message: types.Message):
     url = message.text
     print("LINK RECEIVED:", url) 
     ydl_opts = {
-        "quiet": false,
-        "no_warnings": false,
+        "quiet": False,
+        "no_warnings": False,
     }
 
-    print"("GETTING VIDEO INFO...")
-    
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+    print("GETTING VIDEO INFO...")
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         
     print("VIDEO INFO RECEIVED")
