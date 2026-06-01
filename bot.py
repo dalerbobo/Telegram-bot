@@ -49,47 +49,43 @@ async def handle_link(message: types.Message):
     print("GETTING VIDEO INFO...")
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
+            info = ydl.extract_info(url, download=False)
         
-    print("VIDEO INFO RECEIVED")
-except Exception as e:
-    print("YTDLP ERROR:", e)
-    await message.answer(f"Ошибка: {e}")
-    return
-    title = info.get("title", "Unknown")
-    duration = info.get("duration", 0)
-    views = info.get("view_count", 0)
-    thumbnail = info.get("thumbnail")
-
-    minutes = duration // 60
-    seconds = duration % 60
-
-    if "youtube.com" in url or "youtu.be" in url:
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [InlineKeyboardButton(text="🎧 MP3", callback_data=f"audio|{url}")],
-                [InlineKeyboardButton(text="🎬 144p", callback_data=f"144|{url}")],
-                [InlineKeyboardButton(text="🎬 240p", callback_data=f"240|{url}")],
-                [InlineKeyboardButton(text="🎬 360p", callback_data=f"360|{url}")],
-                [InlineKeyboardButton(text="🎬 480p", callback_data=f"480|{url}")],
-                [InlineKeyboardButton(text="🎬 720p", callback_data=f"720|{url}")],
-                [InlineKeyboardButton(text="🎬 1080p", callback_data=f"1080|{url}")],
-            ]
-        )
-
-        caption = (
-            f"🎬 {title}\n\n"
-            f"👀 Просмотры: {views:,}\n"
-            f"⏱ Длительность: {minutes}:{seconds:02d}\n\n"
-            f"Выбери качество:"
-        )
-
-        await message.answer_photo(
-            photo=thumbnail, caption=caption, reply_markup=keyboard
-        )
-
-    else:
-        await message.answer("❌ Поддерживается только YouTube")
+        print("VIDEO INFO RECEIVED")
+    except Exception as e:
+        print("YTDLP ERROR:", e)
+        await message.answer(f"Ошибка: {e}")
+        return
+        title = info.get("title", "Unknown")
+        duration = info.get("duration", 0)
+        views = info.get("view_count", 0)
+        thumbnail = info.get("thumbnail")
+        minutes = duration // 60
+        seconds = duration % 60
+        
+        if "youtube.com" in url or "youtu.be" in url:
+            keyboard = InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [InlineKeyboardButton(text="🎧 MP3", callback_data=f"audio|{url}")],
+                    [InlineKeyboardButton(text="🎬 144p", callback_data=f"144|{url}")],
+                    [InlineKeyboardButton(text="🎬 240p", callback_data=f"240|{url}")],
+                    [InlineKeyboardButton(text="🎬 360p", callback_data=f"360|{url}")],
+                    [InlineKeyboardButton(text="🎬 480p", callback_data=f"480|{url}")],
+                    [InlineKeyboardButton(text="🎬 720p", callback_data=f"720|{url}")],
+                    [InlineKeyboardButton(text="🎬 1080p", callback_data=f"1080|{url}")],
+                ]
+            )
+            caption = (
+                f"🎬 {title}\n\n"
+                f"👀 Просмотры: {views:,}\n"
+                f"⏱ Длительность: {minutes}:{seconds:02d}\n\n"
+                f"Выбери качество:"
+            )
+            await message.answer_photo(
+                photo=thumbnail, caption=caption, reply_markup=keyboard\
+            )
+        else:
+            await message.answer("❌ Поддерживается только YouTube")
 
 
 # ---------------- CALLBACKS ----------------
